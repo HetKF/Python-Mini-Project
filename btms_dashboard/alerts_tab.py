@@ -7,6 +7,7 @@ from config import SOURCE_NAMES, TEMP_MAX
 class AlertsTab(ttk.Frame):
     def __init__(self, master, app):
         super().__init__(master)
+        ttk.Label(self, text='05  /  WARNINGS', style="Title.TLabel").pack(anchor="w", padx=14, pady=(18, 8))
         self.app = app
         self.head = ttk.Label(self, text="", style="Title.TLabel")
         self.head.pack(anchor="w", padx=14, pady=(14, 2))
@@ -19,8 +20,8 @@ class AlertsTab(ttk.Frame):
         for c, n, w in zip(cols, names, (60, 170, 80, 120, 230, 130)):
             self.tree.heading(c, text=n)
             self.tree.column(c, width=w, anchor="center")
-        self.tree.tag_configure("hot", background="#fde2e2")
-        self.tree.tag_configure("cold", background="#e0eefc")
+        self.tree.tag_configure("hot", background="#361b1c")
+        self.tree.tag_configure("cold", background="#152a39")
         self.tree.pack(fill="both", expand=True, padx=14, pady=12)
 
     def refresh(self):

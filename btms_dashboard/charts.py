@@ -7,7 +7,7 @@ from config import ACCENT, BAD, CARD, FONT, GOOD, MUTED, NAVY, TEMP_MAX, TEMP_MI
 class Chart(tk.Canvas):
 
     def __init__(self, master, **kw):
-        super().__init__(master, bg=CARD, highlightthickness=1, highlightbackground="#dbe0ea", **kw)
+        super().__init__(master, bg=CARD, highlightthickness=1, highlightbackground="#29292d", **kw)
         self._args = None
         self.bind("<Configure>", lambda e: self._redraw())
 
@@ -44,7 +44,7 @@ class BarChart(Chart):
             self.create_line(left, y, w - 10, y, fill=BAD, dash=(5, 4))
             self.create_text(left - 6, y, text=f"{limit:g}", anchor="e", fill=BAD, font=(FONT, 8, "bold"))
             self.create_text(w - 12, y - 9, text="safe limit", anchor="e", fill=BAD, font=(FONT, 8))
-        self.create_line(left, bottom, w - 10, bottom, fill="#c5ccd9")
+        self.create_line(left, bottom, w - 10, bottom, fill="#34343a")
 
 
 class LineChart(Chart):
@@ -60,7 +60,7 @@ class LineChart(Chart):
         def Y(v): return bottom - (v - lo) / (hi - lo) * (bottom - top)
         for t in range(int(lo // 5 * 5), int(hi) + 1, 5):
             if lo <= t <= hi:
-                self.create_line(left, Y(t), right, Y(t), fill="#edf0f5")
+                self.create_line(left, Y(t), right, Y(t), fill="#232326")
                 self.create_text(left - 6, Y(t), text=str(t), anchor="e", font=(FONT, 8), fill=MUTED)
         if limit:
             self.create_line(left, Y(limit), right, Y(limit), fill=BAD, dash=(5, 4))
@@ -78,7 +78,7 @@ class Gauge(Chart):
         x0, x1, y0, y1 = 20, w - 20, 28, 52
 
         def X(v): return x0 + (min(max(v, lo), hi) - lo) / (hi - lo) * (x1 - x0)
-        self.create_rectangle(X(lo), y0, X(TEMP_MIN), y1, fill="#9ec5ee", outline="")
+        self.create_rectangle(X(lo), y0, X(TEMP_MIN), y1, fill="#6aaddb", outline="")
         self.create_rectangle(X(TEMP_MIN), y0, X(TEMP_MAX - 5), y1, fill=GOOD, outline="")
         self.create_rectangle(X(TEMP_MAX - 5), y0, X(TEMP_MAX), y1, fill=WARN, outline="")
         self.create_rectangle(X(TEMP_MAX), y0, X(hi), y1, fill=BAD, outline="")

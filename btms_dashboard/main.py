@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from alerts_tab import AlertsTab
-from config import CFD_COLS, CFD_INTRO, CFD_LABELS, FONT, NAVY, SENSOR_COLS, SENSOR_INTRO, SENSOR_LABELS, TEXT
+from config import ACCENT, BG, BORDER, CARD, GOOD, MUTED, HEADING_FONT, CFD_COLS, CFD_INTRO, CFD_LABELS, FONT, NAVY, SENSOR_COLS, SENSOR_INTRO, SENSOR_LABELS, TEXT
 from crud_tab import CrudTab
 from dashboard_tab import DashboardTab
 from database import Database
@@ -17,24 +17,52 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Battery Cooling Monitor - KJS-CES-02")
-        self.geometry("1120x720")
-        self.minsize(960, 620)
+        self.geometry(f"{min(1440, self.winfo_screenwidth()-40)}x{min(960, self.winfo_screenheight()-80)}")
+        self.minsize(1200, 720)
         setup_style(self)
         self.db = Database()
 
-        head = tk.Frame(self, bg=NAVY)
-        head.pack(fill="x")
-        tk.Label(head, text="🔋  Battery Cooling Monitor", bg=NAVY, fg="white",
-                 font=(FONT, 17, "bold")).pack(side="left", padx=18, pady=(12, 12))
-        tk.Label(head, text="EV battery thermal management  ·  Case study KJS-CES-02", bg=NAVY,
-                 fg="#aab7d4", font=(FONT, 10)).pack(side="left", pady=(16, 0))
+        rail = tk.Frame(self, bg="#0b0b0d", width=96, highlightthickness=1,
+                        highlightbackground=BORDER)
+        rail.pack(side="left", fill="y")
+        rail.pack_propagate(False)
+        tk.Label(rail, text="◉", bg="#0b0b0d", fg=ACCENT,
+                 font=(FONT, 32)).pack(pady=(24, 8))
+        tk.Label(rail, text="B T M S", bg="#0b0b0d", fg=MUTED,
+                 font=(FONT, 8, "bold")).pack(pady=(0, 46))
+        self.nav_buttons = []
+        for i in range(6):
+            button = tk.Button(rail, text=f"{i+1:02d}  ━", bg="#0b0b0d", fg=MUTED,
+                               activebackground=CARD, activeforeground=ACCENT,
+                               relief="flat", bd=0, cursor="hand2", pady=18,
+                               font=(FONT, 11, "bold"), command=lambda n=i: nb.select(n))
+            button.pack(fill="x", padx=8, pady=2)
+            self.nav_buttons.append(button)
+        tk.Label(rail, text="KJS\nCES–02", bg="#0b0b0d", fg=MUTED,
+                 font=(FONT, 8), pady=22).pack(side="bottom")
+
+        content = tk.Frame(self, bg=BG)
+        content.pack(side="left", fill="both", expand=True)
+        head = tk.Frame(content, bg=BG)
+        head.pack(fill="x", padx=28, pady=(24, 12))
+        tk.Label(head, text="E V   /   T H E R M A L   M A N A G E M E N T", bg=BG,
+                 fg=ACCENT, font=(FONT, 9, "bold")).pack(anchor="w")
+        tk.Label(head, text="BATTERY COOLING MONITOR", bg=BG, fg=TEXT,
+                 font=(HEADING_FONT, 28, "bold")).pack(anchor="w", pady=(8, 0))
 
         self.status = tk.StringVar(value="Welcome! Start on the Home tab.")
-        tk.Label(self, textvariable=self.status, anchor="w", bg="#e3e8f2", fg=TEXT,
-                 font=(FONT, 9), padx=14, pady=5).pack(side="bottom", fill="x")
+        status_bar = tk.Frame(content, bg="#0d0d0f", height=56,
+                              highlightthickness=1, highlightbackground=BORDER)
+        status_bar.pack(side="bottom", fill="x")
+        status_bar.pack_propagate(False)
+        tk.Label(status_bar, text="●  LOCAL DATABASE", bg="#0d0d0f", fg=GOOD,
+                 font=(FONT, 8, "bold")).pack(side="left", padx=20)
+        tk.Label(status_bar, textvariable=self.status, anchor="w", bg="#0d0d0f", fg=MUTED,
+                 font=(FONT, 9)).pack(side="left", padx=12)
 
-        nb = ttk.Notebook(self)
-        nb.pack(fill="both", expand=True, padx=8, pady=(8, 0))
+        nb = ttk.Notebook(content)
+        self.notebook = nb
+        nb.pack(fill="both", expand=True, padx=18, pady=(0, 12))
         self.dash = DashboardTab(nb, self)
         self.sensor = CrudTab(nb, self, "sensor_readings", SENSOR_COLS,
                               ["ts", "cell_id", "battery_temp", "coolant_in", "coolant_out",
@@ -51,8 +79,16 @@ class App(tk.Tk):
                           (self.alerts, "  ⚠ Warnings  "), (HelpTab(nb), "  ❔ Help  ")]:
             nb.add(tab, text=name)
 
-        menu = tk.Menu(self)
-        m = tk.Menu(menu, tearoff=0)
+        def sync_navigation(_event=None):
+            active = nb.index(nb.select())
+            for index, button in enumerate(self.nav_buttons):
+                button.configure(fg=ACCENT if index == active else MUTED,
+                                 bg="#24160f" if index == active else "#0b0b0d")
+        nb.bind("<<NotebookTabChanged>>", sync_navigation)
+        sync_navigation()
+
+        menu = tk.Menu(self, bg=CARD, fg=TEXT, activebackground=ACCENT, activeforeground="white")
+        m = tk.Menu(menu, tearoff=0, bg=CARD, fg=TEXT, activebackground=ACCENT, activeforeground="white")
         m.add_command(label="Load sample data (real + synthetic)", command=self.load_sample)
         m.add_command(label="Delete ALL data", command=self.clear_all)
         m.add_separator()

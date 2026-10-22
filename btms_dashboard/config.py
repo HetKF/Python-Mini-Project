@@ -12,16 +12,18 @@ SOURCE_NAMES = {"real": "Real lab data", "synthetic": "Synthetic", "user": "Ente
                 "imported": "Imported"}
 REAL_CREDIT = "A123 26650 cell lab tests, Kawakita de Souza (2021), CC BY 4.0"
 
-BG = "#f3f5f9"
-CARD = "#ffffff"
-NAVY = "#1b2a4a"
-ACCENT = "#2f7bd0"
-GOOD = "#2e9e5b"
-WARN = "#e6a117"
-BAD = "#d64545"
-TEXT = "#1f2937"
-MUTED = "#6b7280"
-FONT = "Segoe UI"
+BG = "#050505"
+CARD = "#111113"
+NAVY = "#f4f1ed"
+ACCENT = "#ff4d00"
+GOOD = "#72d5a3"
+WARN = "#eab467"
+BAD = "#ff7d78"
+TEXT = "#f4f1ed"
+MUTED = "#a2a2ab"
+BORDER = "#29292d"
+FONT = "Satoshi"
+HEADING_FONT = "Cabinet Grotesk"
 
 SENSOR_COLS = [("id", "No.", 50), ("ts", "Date & time", 150), ("cell_id", "Cell", 55),
                ("battery_temp", "Battery °C", 90), ("coolant_in", "Coolant in °C", 95),

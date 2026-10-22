@@ -8,8 +8,9 @@ from config import CARD, FONT, HELP_TEXT, NAVY, TEXT
 class HelpTab(ttk.Frame):
     def __init__(self, master):
         super().__init__(master)
+        ttk.Label(self, text='06  /  HELP & FIELD GUIDE', style="Title.TLabel").pack(anchor="w", padx=14, pady=(18, 8))
         box = tk.Text(self, wrap="word", bg=CARD, fg=TEXT, font=(FONT, 10), relief="flat", padx=22, pady=16,
-                      spacing1=2, spacing3=4, highlightthickness=1, highlightbackground="#dbe0ea")
+                      spacing1=2, spacing3=4, highlightthickness=1, highlightbackground="#29292d")
         box.pack(fill="both", expand=True, padx=14, pady=14)
         box.tag_configure("h", font=(FONT, 11, "bold"), foreground=NAVY, spacing1=10)
         for para in HELP_TEXT.split("\n\n"):

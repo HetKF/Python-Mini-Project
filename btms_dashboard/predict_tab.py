@@ -10,6 +10,7 @@ from model import LinearModel
 class PredictTab(ttk.Frame):
     def __init__(self, master, app):
         super().__init__(master)
+        ttk.Label(self, text='04  /  PREDICT TEMPERATURE', style="Title.TLabel").pack(anchor="w", padx=14, pady=(18, 8))
         self.app = app
         self.model = LinearModel()
         self.syn_note = ""
