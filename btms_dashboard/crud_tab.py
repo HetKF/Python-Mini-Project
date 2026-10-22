@@ -13,6 +13,7 @@ class CrudTab(ttk.Frame):
 
     def __init__(self, master, app, table, columns, fields, labels, defaults, intro, noun):
         super().__init__(master)
+        ttk.Label(self, text=("02  /  TEMPERATURE READINGS" if table == "sensor_readings" else "03  /  COOLING SIMULATIONS"), style="Title.TLabel").pack(anchor="w", padx=14, pady=(18, 8))
         self.app, self.table, self.columns, self.fields = app, table, columns, fields
         self.labels, self.defaults, self.noun = labels, defaults, noun
         self.selected_id = None
@@ -66,11 +67,16 @@ class CrudTab(ttk.Frame):
             self.tree.column(key, width=w, anchor="center")
         sb = ttk.Scrollbar(wrap, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=sb.set)
-        self.tree.pack(side="left", fill="both", expand=True)
-        sb.pack(side="right", fill="y")
+        horizontal = ttk.Scrollbar(wrap, orient="horizontal", command=self.tree.xview)
+        self.tree.configure(xscrollcommand=horizontal.set)
+        wrap.rowconfigure(0, weight=1)
+        wrap.columnconfigure(0, weight=1)
+        self.tree.grid(row=0, column=0, sticky="nsew")
+        sb.grid(row=0, column=1, sticky="ns")
+        horizontal.grid(row=1, column=0, sticky="ew")
         self.tree.bind("<<TreeviewSelect>>", self.on_select)
-        self.tree.tag_configure("bad", background="#fde2e2")
-        self.tree.tag_configure("alt", background="#f6f8fc")
+        self.tree.tag_configure("bad", background="#361b1c")
+        self.tree.tag_configure("alt", background="#19191c")
         self._sort_rev = False
         self.clear()
 
